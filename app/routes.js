@@ -60,7 +60,7 @@ module.exports = function(app, passport) {
 
   // RAWG API route
   app.get('/rawg', async (req, res) => {
-    const API_KEY = 'dfb8374ee6124809bde42bb595eb1a75';
+    const API_KEY = process.env.RAWG_API_KEY;
     const BASE_URL = `https://api.rawg.io/api/platforms?key=${API_KEY}`;
     try {
       const response = await fetch(BASE_URL);
