@@ -1,6 +1,7 @@
 // config/database.js
-module.exports = {
+require('dotenv').config(); // load env vars here too (important for Render)
 
-    'url' : MONGO_URI, 
-    'dbName': 'MyGameList' //my-game-list
+module.exports = {
+  url: process.env.MONGO_URI,
+  dbName: 'MyGameList'
 };
