@@ -1,4 +1,8 @@
 // app/routes.js
+
+
+//---------CHATGPT Helped------------
+//-----------------------------------
 const Platform = require('../app/models/platform');
 
 module.exports = function(app, passport) {
@@ -42,7 +46,7 @@ module.exports = function(app, passport) {
   });
 
   app.post('/signup', (req, res, next) => {
-    console.log('🟢 Signup attempt:', req.body.email);
+    console.log('Signup attempt:', req.body.email);
     next();
   }, passport.authenticate('local-signup', {
     successRedirect: '/profile',
