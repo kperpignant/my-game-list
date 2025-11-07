@@ -1,6 +1,10 @@
 // server.js
 //---CHATGPT----
 require('dotenv').config();
+if (!process.env.RAWG_KEY) {
+  console.error('Missing RAWG_KEY in environment variables.'); //if the key is missing server wont start
+  process.exit(1);
+}
 //---CHATGPT----
 
 const express = require('express');

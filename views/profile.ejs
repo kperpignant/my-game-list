@@ -10,7 +10,7 @@
 <div class="container">
 
     <div class="page-header text-center">
-        <h1><span class="fa fa-anchor"></span> Best Console</h1>
+        <h1><span class="fa fa-anchor"></span> Best Games</h1>
         <a href="/logout" class="btn btn-default btn-sm">Logout</a>
     </div>
 
@@ -36,38 +36,56 @@
             </div>
         </div>
         <div class="col-sm-6">
-          <h3>Games List</h3>
-          <ol id="messages" class="messages">
-          <% for(var i=0; i<messages.length; i++) {%>
-            <li id="message" class="message">
-              <span><%= messages[i].name %></span>
-              <span><%= messages[i].msg %></span>
-              <span><%= messages[i].thumbUp %></span>
-              <span><i class="fa fa-thumbs-up" aria-hidden="true"></i></span>
-              <span><i class="fa fa-thumbs-down" aria-hidden="true"></i></span>
-              <span><i class="fa fa-trash" aria-hidden="true"></i></span>
-            </li>
-          <% } %>
-          </ol>
+  <h2>Available Platforms</h2>
+  <ul id="platformList">
+    <% if (messages && messages.length > 0) { %>
+      <% messages.forEach(platform => { %>
+        <li class="platform-item" data-slug="<%= platform.slug %>">
+          <h3><%= platform.name %></h3>
+          <p><%= platform.games_count %> games</p>
+        </li>
+      <% }) %>
+    <% } else { %>
+      <li>Loading platforms...</li>
+    <% } %>
+  </ul>
 
-          <h2>Add a message</h2>
-        <% if (user.local.email) { %>
-          <form action="/messages" method="POST">
-            <input type="text" value="" placeholder="Game Name" name="name">
-            <input type="text" placeholder="Platform" name="msg">
-            <button type="submit">Submit</button>
-          </form>
-        </div>
-        <% } %>
+  <hr>
+
+  <section id="games">
+    <h2>Games List</h2>
+    <div id="games-list" class="games-grid"></div>
+  </section>
 </div>
-
-<h3>Available Platforms</h3>
-<div id="platforms">
-  <p>Loading platforms...</p>
-</div>
-
 
 <script src="main.js"></script>
+
+<script>
+  document.querySelectorAll('.platform').forEach(item => {
+    item.addEventListener('click', async () => {
+      const slug = item.dataset.slug;
+      console.log(`Loading games for: ${slug}`);
+
+      const res = await fetch(`/games/${slug}`);
+      const games = await res.json();
+
+      const gameList = document.getElementById('gameList');
+      if (!Array.isArray(games) || games.length === 0) {
+        gameList.innerHTML = `<p>No games found for ${slug}</p>`;
+        return;
+      }
+
+      // Render game info
+      gameList.innerHTML = games.map(g => `
+        <div style="margin-bottom: 10px; border-bottom: 1px solid #ccc;">
+          <img src="${g.background_image || ''}" alt="${g.name}" style="width: 200px; border-radius: 6px;"><br>
+          <strong>${g.name}</strong><br>
+          Rating: ${g.rating} | Released: ${g.released || 'N/A'}
+        </div>
+      `).join('');
+    });
+  });
+</script>
 
 </body>
 </html>
